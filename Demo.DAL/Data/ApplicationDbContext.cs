@@ -10,10 +10,14 @@ using System.Threading.Tasks;
 
 namespace Demo.DAL.Data
 {
-    internal class ApplicationDbContext:DbContext
+    public class ApplicationDbContext:DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-         => optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER01;Database=MVCApplicationG04;Trusted_Connection=true;TrustServerCertificate=True");
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :base(options)
+        {
+            
+        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // => optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER01;Database=MVCApplicationG04;Trusted_Connection=true;TrustServerCertificate=True");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

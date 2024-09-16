@@ -1,6 +1,8 @@
+using Demo.DAL.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,7 +25,21 @@ namespace Demo.PL
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(); // Register Built-In Service Required for MVC
+
+            //services.AddControllers(); // Register Built-In Service Required for MVC
+
+            //services.AddScoped<ApplicationDbContext>(); // Send One Object Per Request
+            //services.AddTransient<ApplicationDbContext>(); // Send Several Objects Per Request
+            //services.AddSingleton<ApplicationDbContext>(); // Send One Object Per All Requests
+
+            //services.AddScoped<DbContextOptions<ApplicationDbContext>>();
+
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer("Server=localhost\\MSSQLSERVER01;Database=MVCApplicationG04;Trusted_Connection=true;TrustServerCertificate=True");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
