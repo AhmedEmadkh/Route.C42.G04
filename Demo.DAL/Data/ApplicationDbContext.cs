@@ -1,5 +1,5 @@
 ﻿using Demo.DAL.Data.Configurations;
-using Demo.DAL.Models;
+using Demo.DAL.Models.Departments;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

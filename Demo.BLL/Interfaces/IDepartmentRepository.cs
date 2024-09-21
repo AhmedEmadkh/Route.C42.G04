@@ -1,4 +1,4 @@
-﻿using Demo.DAL.Models;
+﻿using Demo.DAL.Models.Departments;
 using System;
 using System.Collections.Generic;
 using System.Linq;

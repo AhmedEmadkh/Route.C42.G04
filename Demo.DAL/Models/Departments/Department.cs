@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.DAL.Models
+namespace Demo.DAL.Models.Departments
 {
     public class Department
     {
