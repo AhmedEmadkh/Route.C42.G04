@@ -1,6 +1,6 @@
 ﻿using Demo.BLL.Interfaces;
-using Demo.DAL.Data;
 using Demo.DAL.Models.Departments;
+using Demo.DAL.Presistance.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

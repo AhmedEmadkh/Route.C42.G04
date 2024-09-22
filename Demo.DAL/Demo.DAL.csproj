@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -7,6 +7,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Presistance\Data\Migrations\" />
+    <Folder Include="Presistance\Data\DataSeeds\" />
+    <Folder Include="Presistance\Repositories\" />
   </ItemGroup>
 
 </Project>
