@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.DAL.Models
+namespace Demo.DAL.Models.Departments
 {
-    public class Department
+    public class Department : ModelBase
     {
-        public int Id { get; set; }
         public int Code { get; set; }
         public string Name { get; set; }
-        public DateTime DateOfCreation { get; set; }
+        public string? Description { get; set; }
+        public DateOnly CreationDate { get; set; }
     }
 }

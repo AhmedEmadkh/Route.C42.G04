@@ -1,5 +1,5 @@
-﻿using Demo.DAL.Data.Configurations;
-using Demo.DAL.Models;
+﻿using Demo.DAL.Presistance.Data.Configurations;
+using Demo.DAL.Models.Departments;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,20 +8,16 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.DAL.Data
+namespace Demo.DAL.Presistance.Data
 {
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // => optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER01;Database=MVCApplicationG04;Trusted_Connection=true;TrustServerCertificate=True");
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration<Department>(new DepartmentConfigurations());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // Get All Classes that implement the interface(IEntityTypeConfiguration)
         }
         public DbSet<Department> Departments { get; set; }
     }

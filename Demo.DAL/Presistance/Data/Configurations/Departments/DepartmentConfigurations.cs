@@ -1,4 +1,4 @@
-﻿using Demo.DAL.Models;
+﻿using Demo.DAL.Models.Departments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.DAL.Data.Configurations
+namespace Demo.DAL.Presistance.Data.Configurations.Departments
 {
     internal class DepartmentConfigurations : IEntityTypeConfiguration<Department>
     {
@@ -19,6 +19,8 @@ namespace Demo.DAL.Data.Configurations
             builder.Property(D => D.Id).UseIdentityColumn(10, 10);
             builder.Property(D => D.Code).HasColumnType("varchar").HasMaxLength(50).IsRequired();
             builder.Property(D => D.Name).HasColumnType("varchar").HasMaxLength(50).IsRequired();
+            builder.Property(D => D.LastModifiedOn).HasComputedColumnSql("GETDATE()"); // Change the Time of modification every update in the record
+            builder.Property(D => D.CreatedOn).HasDefaultValueSql("GETDATE()"); // Create the time on creating the record
         }
     }
 }
