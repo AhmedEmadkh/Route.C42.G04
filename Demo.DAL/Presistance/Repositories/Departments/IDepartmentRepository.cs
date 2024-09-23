@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.BLL.Interfaces
+namespace Demo.DAL.Presistance.Repositories.Departments
 {
     internal interface IDepartmentRepository
     {
-        IEnumerable<Department> GetAll();
-        Department GetById(int id);
+        IEnumerable<Department> GetAll(bool withAsNoTracking = true);
+        Department? GetById(int id);
         int Add(Department department);
         int Update(Department department);
         int Delete(Department department);

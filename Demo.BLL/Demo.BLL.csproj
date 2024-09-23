@@ -8,4 +8,8 @@
     <ProjectReference Include="..\Demo.DAL\Demo.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Department\" />
+  </ItemGroup>
+
 </Project>
