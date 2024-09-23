@@ -1,4 +1,4 @@
-﻿using Demo.DAL.Models.Departments;
+﻿using Demo.DAL.Entities.Departments;
 using Demo.DAL.Presistance.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Demo.DAL.Presistance.Repositories.Departments
 {
-    internal class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
     {
         private readonly ApplicationDbContext _context;
         public DepartmentRepository(ApplicationDbContext context)
@@ -17,6 +17,10 @@ namespace Demo.DAL.Presistance.Repositories.Departments
             _context = context;
         }
 
+        public Department Get(int id)
+        {
+            return _context.Departments.Find(id);
+        }
 
         public IEnumerable<Department> GetAll(bool withAsNoTracking = true)
         {
@@ -25,10 +29,11 @@ namespace Demo.DAL.Presistance.Repositories.Departments
             return _context.Departments.ToList();
         }
 
-        public Department GetById(int id)
+        public IQueryable<Department> GetAllAsIQueryable(bool withAsNoTracking = true)
         {
-            return _context.Departments.Find(id);
+           return _context.Departments;
         }
+
         public int Add(Department department)
         {
             _context.Departments.Add(department);
