@@ -1,3 +1,4 @@
+using Demo.BLL.Services.Departments;
 using Demo.DAL.Presistance.Data;
 using Demo.DAL.Presistance.Repositories.Departments;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +24,7 @@ namespace Demo.PL
                 options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
             });
             webApplicationBuilder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            webApplicationBuilder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
             #endregion
 

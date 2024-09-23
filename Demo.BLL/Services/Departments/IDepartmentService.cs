@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Demo.BLL.Services.Departments
 {
-    internal interface IDepartmentService
+    public interface IDepartmentService
     {
         IEnumerable<DepartmentToReturnDto> GetAllDepartments();
         DeparmentDetailsToReturnDto? GetDartmentById(int Id);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Demo.BLL.Models.Departments
 {
-    internal class DeparmentDetailsToReturnDto
+    public class DeparmentDetailsToReturnDto
     {
         public int Id { get; set; }
         public int CreatedBy { get; set; }
