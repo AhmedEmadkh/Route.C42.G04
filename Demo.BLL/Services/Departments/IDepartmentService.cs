@@ -10,8 +10,8 @@ namespace Demo.BLL.Services.Departments
 {
     public interface IDepartmentService
     {
-        IEnumerable<DepartmentToReturnDto> GetAllDepartments();
-        DeparmentDetailsToReturnDto? GetDartmentById(int Id);
+        IEnumerable<DepartmentDto> GetAllDepartments();
+        DeparmentDetailsDto? GetDartmentById(int Id);
         int CreateDepartment(CreatedDepartmentDto departmentDto);
         int UpdatedDepartment(UpdatedDepartmentDto departmentDto);
         bool DeleteDepartment(int Id);

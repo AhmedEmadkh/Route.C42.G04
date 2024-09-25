@@ -1,5 +1,7 @@
 ﻿using Demo.BLL.Models.Departments;
 using Demo.BLL.Services.Departments;
+using Demo.DAL.Entities.Departments;
+using Demo.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Framework;
@@ -11,6 +13,8 @@ namespace Demo.PL.Controllers
 {
     public class DepartmentController : Controller
     {
+        #region Services
+
         private readonly IDepartmentService _departmentsService;
         private readonly ILogger<DepartmentController> _logger;
         private readonly IWebHostEnvironment _env;
@@ -27,6 +31,10 @@ namespace Demo.PL.Controllers
             _departmentsService = departmentsService;
         }
 
+        #endregion
+
+        #region Index
+        
         [HttpGet] // Get: Department/Index
         public IActionResult Index()
         {
@@ -34,15 +42,19 @@ namespace Demo.PL.Controllers
             return View(department);
         }
 
+        #endregion
+
+        #region Create
+        
         [HttpGet] // Get: Department/Create
         public IActionResult Create()
         {
             return View();
         }
-        [HttpPost] //Post: Department/Create
+        [HttpPost] //Post
         public IActionResult Create(CreatedDepartmentDto department)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid) //Server Side Validation
             {
                 return View(department);
             }
@@ -51,7 +63,7 @@ namespace Demo.PL.Controllers
             {
                 var Result = _departmentsService.CreateDepartment(department);
 
-                if(Result > 0)
+                if (Result > 0)
                 {
                     return RedirectToAction(nameof(Index));
                 }
@@ -62,35 +74,133 @@ namespace Demo.PL.Controllers
                     return View(department);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // 1. Log the Exception
-                _logger.LogError(ex,ex.Message);
+                _logger.LogError(ex, ex.Message);
 
                 // 2. Set Messaege
-                if (_env.IsDevelopment())
-                {
-                    Message = ex.Message;
-                    return View(department);
-                }
-                else
-                {
-                    Message = "Department Is Not Created";
-                    return View("Error",Message);
-                }
+                Message = _env.IsDevelopment() ? ex.Message : "An Error has occured during the Updating";
             }
+            ModelState.AddModelError(string.Empty, Message);
+            return View(department);
         }
+
+        #endregion
+
+        #region Details
 
         [HttpGet] // Get: Department/Create
         public IActionResult Details(int? id)
         {
-            if(id is null)
+            if (id is null)
                 return BadRequest();
             var department = _departmentsService.GetDartmentById(id.Value);
 
-            if(department is null)
+            if (department is null)
                 return NotFound();
             return View(department);
         }
+
+        #endregion
+
+        #region Edit
+
+        [HttpGet] // Get: Department/Edit/id
+        public IActionResult Edit(int? id)
+        {
+            if (id is null)
+                return BadRequest(); // 400
+            var department = _departmentsService.GetDartmentById(id.Value);
+
+            if (department is null)
+                return NotFound();
+            return View(new DepartmentEditViewModel
+            {
+                Code = department.Code,
+                Name = department.Name,
+                Description = department.Description,
+                CreationDate = department.CreationDate,
+            });
+        }
+
+        [HttpPost] // Post
+        public IActionResult Edit(int id, DepartmentEditViewModel departmentVM)
+        {
+            if (!ModelState.IsValid) //Server Side Validation
+                return View(departmentVM);
+            var Message = string.Empty;
+            try
+            {
+                var departmentToUpdate = new UpdatedDepartmentDto()
+                {
+                    Id = id,
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
+                };
+
+                var Updated = _departmentsService.UpdatedDepartment(departmentToUpdate) > 0;
+                if (Updated)
+                    return RedirectToAction(nameof(Index));
+                Message = "An Error has occured during the Updating";
+            }
+            catch (Exception ex)
+            {
+                // 1.Log the Error
+                _logger.LogError(ex, ex.Message);
+
+                // 2.Set the message
+                Message = _env.IsDevelopment() ? ex.Message : "An Error has occured during the Creating";
+            }
+            ModelState.AddModelError(string.Empty, Message);
+            return View(departmentVM);
+        }
+
+        #endregion
+        #region Delete
+
+        [HttpGet] // Get:Department/Delete
+        public IActionResult Delete(int? id)
+        {
+            if (id is null)
+                return BadRequest();
+
+            var deleted = _departmentsService.GetDartmentById(id.Value);
+
+            if (deleted is null)
+                return NotFound();
+            return View(deleted);
+        }
+
+        [HttpPost] //Post
+        public IActionResult Delete(int id)
+        {
+            var message = string.Empty;
+            try
+            {
+                var deleted = _departmentsService.DeleteDepartment(id);
+
+                if (deleted)
+                    return RedirectToAction(nameof(Index));
+                message = "an error has occured during the deleting of the department";
+            }
+            catch (Exception ex)
+            {
+
+                // 1.Log the error
+                _logger.LogError(ex, ex.Message);
+
+                // 2.Set the message
+
+                message = _env.IsDevelopment() ? ex.Message : "an error has occured during the deleting of the department";
+            }
+            //ModelState.AddModelError(string.Empty, message);
+            return RedirectToAction(nameof(Index));
+            
+        }
+
+        #endregion
     }
 }

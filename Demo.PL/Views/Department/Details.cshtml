@@ -1,4 +1,4 @@
-﻿@model DeparmentDetailsToReturnDto
+﻿@model DeparmentDetailsDto
 @{
     ViewData["Title"] = "Details";
 }
@@ -7,13 +7,12 @@
 
 <ul class="nav nav-tabs" id="departmentTabs" role="tablist">
     <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="general-tab" data-bs-toggle="tab" href="javascript:void(0)" role="tab" aria-controls="general" aria-selected="true" onclick="showTab('general')">General</a>
+        <a class="nav-link active" id="general-tab" aria-controls="general" href="#general" data-bs-toggle="tab" aria-selected="true">General</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link" id="administration-tab" data-bs-toggle="tab" href="javascript:void(0)" role="tab" aria-controls="administration" aria-selected="false" onclick="showTab('administration')">Administration</a>
+        <a class="nav-link" id="administration-tab" aria-controls="administration" href="#administration" data-bs-toggle="tab" aria-selected="false">Administration</a>
     </li>
 </ul>
-
 
 <div class="tab-content" id="myTabContent">
     <!-- General Tab Content -->
@@ -59,9 +58,12 @@
             </div>
         </div>
     </div>
-</div>
-
-<div class="mt-4">
+    <div class="mt-4">
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success">Edit</a>
     <a asp-action="Index" class="btn btn-secondary">Back To List</a>
 </div>
+</div>
+
+
+
+

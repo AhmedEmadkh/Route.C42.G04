@@ -19,9 +19,9 @@ namespace Demo.BLL.Services.Departments
             _departmentRepository = departmentRepository;
         }
 
-        public IEnumerable<DepartmentToReturnDto> GetAllDepartments()
+        public IEnumerable<DepartmentDto> GetAllDepartments()
         {
-            var departments = _departmentRepository.GetAllAsIQueryable().Select(department => new DepartmentToReturnDto
+            var departments = _departmentRepository.GetAllAsIQueryable().Select(department => new DepartmentDto
             {
                 Id = department.Id,
                 Code = department.Code,
@@ -31,12 +31,12 @@ namespace Demo.BLL.Services.Departments
             return departments;
         }
 
-        public DeparmentDetailsToReturnDto GetDartmentById(int Id)
+        public DeparmentDetailsDto GetDartmentById(int Id)
         {
             var departments = _departmentRepository.Get(Id);
 
             if (departments is not null)
-                return new DeparmentDetailsToReturnDto
+                return new DeparmentDetailsDto
                 {
                     Id = departments.Id,
                     Code = departments.Code,
