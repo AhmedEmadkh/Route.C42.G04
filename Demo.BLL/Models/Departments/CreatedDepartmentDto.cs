@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.DAL.Models.Departments
+namespace Demo.BLL.Models.Departments
 {
-    public class Department : ModelBase
+    public class CreatedDepartmentDto
     {
         public int Code { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
+        [Display(Name = "Date Of Creation")]
         public DateOnly CreationDate { get; set; }
     }
 }

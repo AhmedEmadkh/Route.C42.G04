@@ -1,5 +1,5 @@
 ﻿using Demo.DAL.Presistance.Data.Configurations;
-using Demo.DAL.Models.Departments;
+using Demo.DAL.Entities.Departments;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

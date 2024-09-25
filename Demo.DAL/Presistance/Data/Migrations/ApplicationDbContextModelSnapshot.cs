@@ -22,7 +22,7 @@ namespace Demo.DAL.Presistance.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Demo.DAL.Models.Departments.Department", b =>
+            modelBuilder.Entity("Demo.DAL.Entities.Departments.Department", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
