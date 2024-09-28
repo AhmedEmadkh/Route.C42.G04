@@ -1,10 +1,8 @@
 ﻿using Demo.BLL.Models.Departments;
 using Demo.BLL.Services.Departments;
-using Demo.DAL.Entities.Departments;
 using Demo.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Framework;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -90,7 +88,7 @@ namespace Demo.PL.Controllers
 
         #region Details
 
-        [HttpGet] // Get: Department/Create
+        [HttpGet] // Get: Department/Details
         public IActionResult Details(int? id)
         {
             if (id is null)

@@ -28,7 +28,7 @@ namespace Demo.DAL.Presistance.Repositories._Generic
 
         public IQueryable<T> GetAllAsIQueryable(bool withAsNoTracking = true)
         {
-            return _context.Set<T>();
+            return _context.Set<T>().Where(X => !X.IsDeleted);
         }
 
         public int Add(T T)

@@ -30,5 +30,14 @@ namespace Demo.BLL.Models.Employees
         public DateOnly HiringDate { get; set; }
         public string Gender { get; set; }
         public string EmployeeType { get; set; }
+
+        #region Administration
+
+        public int CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public int LastModifiedBy { get; set; }
+        public DateTime LastModifiedOn { get; set; }
+
+        #endregion
     }
 }
