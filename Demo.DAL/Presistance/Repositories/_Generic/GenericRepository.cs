@@ -22,8 +22,8 @@ namespace Demo.DAL.Presistance.Repositories._Generic
         public IEnumerable<T> GetAll(bool withAsNoTracking = true)
         {
             if (withAsNoTracking)
-                return _context.Set<T>().AsNoTracking().ToList();
-            return _context.Set<T>().ToList();
+                return _context.Set<T>().Where(X => !X.IsDeleted).AsNoTracking().ToList();
+            return _context.Set<T>().Where(X => !X.IsDeleted).ToList();
         }
 
         public IQueryable<T> GetAllAsIQueryable(bool withAsNoTracking = true)
@@ -43,7 +43,8 @@ namespace Demo.DAL.Presistance.Repositories._Generic
         }
         public int Delete(T T)
         {
-            _context.Set<T>().Remove(T);
+            T.IsDeleted = true;
+            _context.Set<T>().Update(T);
             return _context.SaveChanges();
         }
     }

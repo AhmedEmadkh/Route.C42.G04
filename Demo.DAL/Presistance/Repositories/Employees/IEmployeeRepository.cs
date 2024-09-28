@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Demo.DAL.Presistance.Repositories.Employees
 {
-    internal interface IEmployeeRepository : IGenericRepository<Employee>
+    public interface IEmployeeRepository : IGenericRepository<Employee>
     {
     }
 }
