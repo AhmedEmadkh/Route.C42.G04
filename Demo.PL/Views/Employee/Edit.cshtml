@@ -1,0 +1,77 @@
+﻿@model UpdatedEmployeeDto
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row justify-content-center align-items-center flex-column">
+
+    <h1 class="col-6 my-4">Update Employee</h1>
+    <form asp-action="Edit" class="row col-6">
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <div class="form-group col-6 mb-3">
+            <label class="form-lable mb-2" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control mb-3" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group col-6 mb-3">
+            <label class="form-lable mb-2" asp-for="Email"></label>
+            <input asp-for="Email" class="form-control mb-3" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group col-6 mb-3">
+            <label class="form-lable mb-2" asp-for="Address"></label>
+            <input asp-for="Address" class="form-control mb-3" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group col-6 mb-3">
+            <label class="form-lable mb-2" asp-for="Age"></label>
+            <input asp-for="Age" class="form-control mb-3" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+        <div class="form-group col-6 mb-3">
+            <label class="form-lable mb-2" asp-for="Salary"></label>
+            <input asp-for="Salary" class="form-control mb-3" />
+            <span asp-validation-for="Salary" class="text-danger"></span>
+        </div>
+        <div class="form-group col-6 mb-3">
+            <label class="form-lable mb-2" asp-for="PhoneNumber"></label>
+            <input asp-for="PhoneNumber" class="form-control mb-3" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group col-6 mb-3">
+            <label class="control-lable mb-2" asp-for="EmployeeType"></label>
+            <select asp-for="EmployeeType" asp-items="Html.GetEnumSelectList<EmployeeType>()" class="form-control">
+                <option value="">Select Employee Type</option>
+            </select>
+
+        </div>
+        <div class="form-group col-6 mb-3">
+            <label class="control-lable mb-2 me-2" asp-for="Gender"></label><br />
+            @foreach (Gender genderOption in Enum.GetValues(typeof(Gender)))
+            {
+                <label class="radio-inline">
+                    <input type="radio" asp-for="Gender" value="@genderOption" />
+                    @genderOption
+                </label>
+
+                <br />
+            }
+        </div>
+        <div class="form-group col-12 mb-3">
+            <label class="form-lable" asp-for="HiringDate"></label>
+            <input type="date" asp-for="HiringDate" class="form-control" />
+        </div>
+        <div class="form-check col-12 mb-3">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label class="form-check-lable mb-2" asp-for="IsActive"></label>
+        </div>
+
+        <div class="my-4">
+            <input type="submit" value="Save" class="btn btn-success" /> |
+            <a asp-action="Index" class="btn btn-danger">Cancel</a>
+        </div>
+    </form>
+
+</div>
+

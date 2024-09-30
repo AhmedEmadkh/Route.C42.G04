@@ -150,7 +150,7 @@ namespace Demo.PL.Controllers
                 _logger.LogError(ex, ex.Message);
 
                 // 2.Set the message
-                Message = _env.IsDevelopment() ? ex.Message : "An Error has occured during the Creating";
+                Message = _env.IsDevelopment() ? ex.Message : "An Error has occured during the Updating";
             }
             ModelState.AddModelError(string.Empty, Message);
             return View(departmentVM);

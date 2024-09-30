@@ -80,6 +80,7 @@ namespace Demo.BLL.Services.Employees
         {
             var employee = new Employee()
             {
+                Id = employeeDto.Id,
                 Name = employeeDto.Name,
                 Age = employeeDto.Age,
                 Address = employeeDto.Address,

@@ -81,8 +81,8 @@ namespace Demo.PL.Controllers
 
         #endregion
 
-        [HttpGet] // Get: Employee/Details
         #region Details
+        [HttpGet] // Get: Employee/Details
         public IActionResult Details(int? id)
         {
             if (id is null)
@@ -96,17 +96,58 @@ namespace Demo.PL.Controllers
         #endregion
 
         #region Update
-        //[HttpGet] // Get: Department/Edit/id
-        //public IActionResult Edit(int? id)
-        //{
-        //    if(id is null)
-        //        return BadRequest();
-        //    var employee = _employeeService.GetEmployeeById(id.Value);
 
-        //    if(employee is null)
-        //        return NotFound();
-        //    return View(new );
-        //}
+        [HttpGet] // Get: Department/Edit/id
+        public IActionResult Edit(int? id)
+        {
+            if (id is null)
+                return BadRequest();
+            var employee = _employeeService.GetEmployeeById(id.Value);
+
+            if (employee is null)
+                return NotFound();
+            return View(new UpdatedEmployeeDto
+            {
+                Id =employee.Id,
+                Name = employee.Name,
+                Email = employee.Email,
+                Age = employee.Age,
+                Address = employee.Address,
+                Salary = employee.Salary,
+                PhoneNumber = employee.PhoneNumber,
+                IsActive = employee.IsActive,
+                EmployeeType = employee.EmployeeType,
+                Gender = employee.Gender,
+                HiringDate = employee.HiringDate,
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromRoute]int id,UpdatedEmployeeDto employee)
+        {
+            if(!ModelState.IsValid)
+                return View(employee);
+            var Message = string.Empty;
+            try
+            {
+                var Updated = _employeeService.UpdateEmployee(employee) > 0;
+
+                if (Updated)
+                    return RedirectToAction(nameof(Index));
+                Message = "An Error has occured during the Updating";
+            }
+            catch (Exception ex)
+            {
+                // 1.Log The Error
+                _logger.LogError(ex,ex.Message);
+
+                // 2.Set The Message
+                Message = _env.IsDevelopment() ? ex.Message : "An Error has occured during the Updating";
+            }
+            ModelState.AddModelError(string.Empty, Message);
+            return View(employee);
+        }
+
         #endregion
 
         #region Delete
