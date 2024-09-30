@@ -37,6 +37,7 @@ namespace Demo.BLL.Models.Employees
         [Display(Name = "Hiring Date")]
         public DateOnly HiringDate { get; set; }
         public Gender Gender { get; set; }
+        [Display(Name ="Employee Type")]
         public EmployeeType EmployeeType { get; set; }
     }
 }

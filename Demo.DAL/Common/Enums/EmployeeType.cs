@@ -10,5 +10,6 @@ namespace Demo.DAL.Common.Enums
     {
         PartTimeEmployee = 1,
         FullTimeEmployee = 2,
+        Internship = 3,
     }
 }
