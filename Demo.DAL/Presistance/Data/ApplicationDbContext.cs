@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Demo.DAL.Entities.Employees;
 
 namespace Demo.DAL.Presistance.Data
 {
@@ -20,5 +21,6 @@ namespace Demo.DAL.Presistance.Data
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // Get All Classes that implement the interface(IEntityTypeConfiguration)
         }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }

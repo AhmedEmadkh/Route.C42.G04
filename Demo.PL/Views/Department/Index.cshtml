@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DepartmentToReturnDto>
+﻿@model IEnumerable<DepartmentDto>
 @{
     ViewData["Title"] = "Departments";
 }
@@ -39,11 +39,35 @@
                         </a>
                     </td>
                     <td>
-                        <a asp-controller="Department" asp-action="Details" asp-route-id="@department.Id" class="btn btn-danger">
-                            <i class="fa-solid fa-trash"></i> Details
-                        </a>
+                        @* <a asp-controller="Department" asp-action="Delete" asp-route-id="@department.Id" class="btn btn-danger">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </a> *@
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
                     </td>
                 </tr>
+                <!-- modal -->
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Department</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are You Sure To Delete!!
+                            </div>
+                            <div class="modal-footer">
+                                <form asp-action="Delete" asp-route-id="@department.Id" method="post">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         </tbody>
     </table>

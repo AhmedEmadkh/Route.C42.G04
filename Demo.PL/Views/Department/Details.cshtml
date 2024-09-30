@@ -1,4 +1,4 @@
-﻿@model DeparmentDetailsToReturnDto
+﻿@model DeparmentDetailsDto
 @{
     ViewData["Title"] = "Details";
 }
@@ -7,33 +7,34 @@
 
 <ul class="nav nav-tabs" id="departmentTabs" role="tablist">
     <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="general-tab" data-bs-toggle="tab" href="javascript:void(0)" role="tab" aria-controls="general" aria-selected="true" onclick="showTab('general')">General</a>
+        <a class="nav-link active" id="general-tab" aria-controls="general" href="#general" data-bs-toggle="tab" aria-selected="true">General</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link" id="administration-tab" data-bs-toggle="tab" href="javascript:void(0)" role="tab" aria-controls="administration" aria-selected="false" onclick="showTab('administration')">Administration</a>
+        <a class="nav-link" id="administration-tab" aria-controls="administration" href="#administration" data-bs-toggle="tab" aria-selected="false">Administration</a>
     </li>
 </ul>
-
 
 <div class="tab-content" id="myTabContent">
     <!-- General Tab Content -->
     <div class="tab-pane fade show active p-4 border" id="general" role="tabpanel" aria-labelledby="general-tab">
         <div class="row">
-            <div class="form-group col-6">
-                <label class="col-form-label" asp-for="Code"></label>
-                <input asp-for="Code" class="form-control" readonly />
+            <div class="form-group mb-3">
+                <label class="form-lable mb-2" asp-for="Code"></label>
+                <input asp-for="Code" class="form-control mb-3" disabled />
+                <span asp-validation-for="Code" class="text-danger"></span>
             </div>
-            <div class="form-group col-6">
-                <label class="col-form-label" asp-for="Name"></label>
-                <input asp-for="Name" class="form-control" readonly />
+            <div class="form-group mb-3">
+                <label class="form-lable mb-2" asp-for="Name"></label>
+                <input asp-for="Name" class="form-control mb-3" disabled />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group col-12">
-                <label class="col-form-label" asp-for="Description"></label>
-                <input asp-for="Description" class="form-control" readonly />
+            <div class="form-group mb-3">
+                <label class="form-lable mb-2" asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control mb-3" disabled></textarea>
             </div>
-            <div class="form-group col-12">
-                <label class="col-form-label" asp-for="CreationDate"></label>
-                <input asp-for="CreationDate" class="form-control" readonly />
+            <div class="form-group mb-3">
+                <label class="form-lable mb-2" asp-for="CreationDate"></label>
+                <input type="date" asp-for="CreationDate" class="form-control mb-3" disabled />
             </div>
         </div>
     </div>
@@ -43,25 +44,28 @@
         <div class="row">
             <div class="form-group col-6">
                 <label class="col-form-label" asp-for="CreatedBy"></label>
-                <input asp-for="CreatedBy" class="form-control" readonly />
+                <input asp-for="CreatedBy" class="form-control" disabled />
             </div>
             <div class="form-group col-6">
                 <label class="col-form-label" asp-for="CreatedOn"></label>
-                <input asp-for="CreatedOn" class="form-control" readonly />
+                <input asp-for="CreatedOn" class="form-control" disabled />
             </div>
             <div class="form-group col-6">
                 <label class="col-form-label" asp-for="LastModifiedBy"></label>
-                <input asp-for="LastModifiedBy" class="form-control" readonly />
+                <input asp-for="LastModifiedBy" class="form-control" disabled />
             </div>
             <div class="form-group col-6">
                 <label class="col-form-label" asp-for="LastModifiedOn"></label>
-                <input asp-for="LastModifiedOn" class="form-control" readonly />
+                <input asp-for="LastModifiedOn" class="form-control" disabled />
             </div>
         </div>
     </div>
-</div>
-
-<div class="mt-4">
+    <div class="mt-4">
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success">Edit</a>
     <a asp-action="Index" class="btn btn-secondary">Back To List</a>
 </div>
+</div>
+
+
+
+
