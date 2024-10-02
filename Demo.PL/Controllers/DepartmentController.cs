@@ -50,6 +50,7 @@ namespace Demo.PL.Controllers
             return View();
         }
         [HttpPost] //Post
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreatedDepartmentDto department)
         {
             if (!ModelState.IsValid) //Server Side Validation
@@ -105,6 +106,7 @@ namespace Demo.PL.Controllers
         #region Edit
 
         [HttpGet] // Get: Department/Edit/id
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int? id)
         {
             if (id is null)
@@ -173,6 +175,7 @@ namespace Demo.PL.Controllers
         }
 
         [HttpPost] //Post
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var message = string.Empty;

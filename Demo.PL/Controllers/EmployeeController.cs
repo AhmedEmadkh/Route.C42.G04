@@ -44,6 +44,7 @@ namespace Demo.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreatedEmployeeDto emoloyeeDto)
         {
             if (!ModelState.IsValid)
@@ -123,6 +124,7 @@ namespace Demo.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute]int id,UpdatedEmployeeDto employee)
         {
             if(!ModelState.IsValid)
@@ -164,6 +166,7 @@ namespace Demo.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var Message = string.Empty;
