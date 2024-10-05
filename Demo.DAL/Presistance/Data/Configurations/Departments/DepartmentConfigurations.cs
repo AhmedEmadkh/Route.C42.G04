@@ -21,6 +21,12 @@ namespace Demo.DAL.Presistance.Data.Configurations.Departments
             builder.Property(D => D.Name).HasColumnType("varchar").HasMaxLength(50).IsRequired();
             builder.Property(D => D.LastModifiedOn).HasComputedColumnSql("GETDATE()"); // Change the Time of modification every update in the record
             builder.Property(D => D.CreatedOn).HasDefaultValueSql("GETUTCDATE()"); // Create the time on creating the record
+
+
+            builder.HasMany(E => E.Employees)
+                .WithOne(D => D.Department)
+                .HasForeignKey(E => E.DepartmentId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

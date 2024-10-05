@@ -1,4 +1,5 @@
 ﻿using Demo.BLL.Models.Employees;
+using Demo.BLL.Services.Departments;
 using Demo.BLL.Services.Employees;
 using Demo.DAL.Entities.Employees;
 using Demo.PL.ViewModels.Employees;
@@ -67,6 +68,7 @@ namespace Demo.PL.Controllers
                     EmployeeType = employeeVM.EmployeeType,
                     Gender = employeeVM.Gender,
                     HiringDate = employeeVM.HiringDate,
+                    DepartmentId = employeeVM.DepartmentId
                 };
                 var result = _employeeService.CreateEmployee(CreatedEmp);
 

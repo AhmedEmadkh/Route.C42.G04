@@ -40,5 +40,7 @@ namespace Demo.BLL.Models.Employees
         public DateTime LastModifiedOn { get; set; }
 
         #endregion
+
+        public string? Department { get; set; }
     }
 }

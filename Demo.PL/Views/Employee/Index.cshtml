@@ -3,6 +3,7 @@
     ViewData["Title"] = "Employee";
 }
 
+
 <h1 class="mb-4">Employees</h1>
 
 <a asp-controller="Employee" asp-action="Create" class="btn btn-primary my-3">Create New Employee</a>
@@ -15,6 +16,7 @@
             <tr>
                 <th>@Html.DisplayNameFor(E => E.Name)</th>
                 <th>@Html.DisplayNameFor(E => E.Email)</th>
+                <th>@Html.DisplayNameFor(E => E.Department)</th>
                 <th>@Html.DisplayNameFor(E => E.EmployeeType)</th>
                 <th>@Html.DisplayNameFor(E => E.Age)</th>
                 <th>@Html.DisplayNameFor(E => E.Salary)</th>
@@ -31,6 +33,7 @@
                 <tr>
                     <td>@Html.DisplayFor(X =>employee.Name)</td>
                     <td>@Html.DisplayFor(X =>employee.Email)</td>
+                    <td>@Html.DisplayFor(X =>employee.Department)</td>
                     <td>@Html.DisplayFor(X =>employee.EmployeeType)</td>
                     <td>@Html.DisplayFor(X =>employee.Age)</td>
                     <td>@Html.DisplayFor(X =>employee.Salary)</td>
