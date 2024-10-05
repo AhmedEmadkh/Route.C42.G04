@@ -23,7 +23,9 @@ namespace Demo.PL
             webApplicationBuilder.Services.AddControllersWithViews();
             webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
+                options
+                .UseLazyLoadingProxies()
+                .UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
             });
             webApplicationBuilder.Services.AddScoped<IDepartmentService, DepartmentService>();
             webApplicationBuilder.Services.AddScoped<IEmployeeService, EmployeeService>();

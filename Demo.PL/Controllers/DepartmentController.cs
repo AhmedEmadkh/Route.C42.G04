@@ -30,7 +30,6 @@ namespace Demo.PL.Controllers
         }
 
         #endregion
-
         #region Index
         
         [HttpGet] // Get: Department/Index
@@ -41,7 +40,6 @@ namespace Demo.PL.Controllers
         }
 
         #endregion
-
         #region Create
         
         [HttpGet] // Get: Department/Create
@@ -50,16 +48,24 @@ namespace Demo.PL.Controllers
             return View();
         }
         [HttpPost] //Post
-        public IActionResult Create(CreatedDepartmentDto department)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(DepartmentEditViewModel departmentVM)
         {
             if (!ModelState.IsValid) //Server Side Validation
             {
-                return View(department);
+                return View(departmentVM);
             }
             var Message = string.Empty;
             try
             {
-                var Result = _departmentsService.CreateDepartment(department);
+                var departmentToCreate = new CreatedDepartmentDto()
+                {
+                    Code = departmentVM.Code,
+                    Name = departmentVM.Name,
+                    Description = departmentVM.Description,
+                    CreationDate = departmentVM.CreationDate,
+                };
+                var Result = _departmentsService.CreateDepartment(departmentToCreate);
 
                 if (Result > 0)
                 {
@@ -69,7 +75,7 @@ namespace Demo.PL.Controllers
                 {
                     Message = "Department Is Not Created";
                     ModelState.AddModelError(string.Empty, Message);
-                    return View(department);
+                    return View(departmentVM);
                 }
             }
             catch (Exception ex)
@@ -81,11 +87,10 @@ namespace Demo.PL.Controllers
                 Message = _env.IsDevelopment() ? ex.Message : "An Error has occured during the Updating";
             }
             ModelState.AddModelError(string.Empty, Message);
-            return View(department);
+            return View(departmentVM);
         }
 
         #endregion
-
         #region Details
 
         [HttpGet] // Get: Department/Details
@@ -101,7 +106,6 @@ namespace Demo.PL.Controllers
         }
 
         #endregion
-
         #region Edit
 
         [HttpGet] // Get: Department/Edit/id
@@ -123,6 +127,7 @@ namespace Demo.PL.Controllers
         }
 
         [HttpPost] // Post
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, DepartmentEditViewModel departmentVM)
         {
             if (!ModelState.IsValid) //Server Side Validation
@@ -173,6 +178,7 @@ namespace Demo.PL.Controllers
         }
 
         [HttpPost] //Post
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var message = string.Empty;

@@ -1,15 +1,11 @@
 ﻿using Demo.DAL.Common.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Demo.BLL.Models.Employees
+namespace Demo.PL.ViewModels.Employees
 {
-    public class CreatedEmployeeDto
+    public class EmployeeEditCreateViewModel
     {
+
         [MaxLength(50, ErrorMessage = "Max Length of Name is 50 Chars")]
         [MinLength(5, ErrorMessage = "Min Length of Name is 5 Chars")]
         public string Name { get; set; }
@@ -31,15 +27,15 @@ namespace Demo.BLL.Models.Employees
         public string? Email { get; set; }
 
         [Phone]
-        [Display(Name ="Phone Number")]
+        [Display(Name = "Phone Number")]
         public string? PhoneNumber { get; set; }
 
         [Display(Name = "Hiring Date")]
         public DateOnly HiringDate { get; set; }
         public Gender Gender { get; set; }
-        [Display(Name ="Employee Type")]
         public EmployeeType EmployeeType { get; set; }
 
+        [Display(Name = "Department")]
         public int? DepartmentId { get; set; }
     }
 }

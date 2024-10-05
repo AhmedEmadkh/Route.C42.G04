@@ -28,25 +28,7 @@
                     <td>@department.Code</td>
                     <td>@department.Name</td>
                     <td>@department.CreationDate</td>
-                    <td>
-                        <a asp-controller="Department" asp-action="Details" asp-route-id="@department.Id" class="btn btn-warning">
-                            <i class="fa-solid fa-eye"></i> Details
-                        </a>
-                    </td>
-                    <td>
-                        <a asp-controller="Department" asp-action="Edit" asp-route-id="@department.Id" class="btn btn-success">
-                            <i class="fa-solid fa-pen-to-square"></i> Update
-                        </a>
-                    </td>
-                    <td>
-                        @* <a asp-controller="Department" asp-action="Delete" asp-route-id="@department.Id" class="btn btn-danger">
-                            <i class="fa-solid fa-trash"></i> Delete
-                        </a> *@
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                            <i class="fa-solid fa-trash"></i> Delete
-                        </button>
-                    </td>
+                    <partial name="_ButtonsPartial" model="@department.Id" />
                 </tr>
                 <!-- modal -->
                 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

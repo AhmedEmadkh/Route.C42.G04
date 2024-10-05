@@ -1,5 +1,8 @@
 ﻿using Demo.BLL.Models.Employees;
+using Demo.BLL.Services.Departments;
 using Demo.BLL.Services.Employees;
+using Demo.DAL.Entities.Employees;
+using Demo.PL.ViewModels.Employees;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -25,7 +28,6 @@ namespace Demo.PL.Controllers
             _env = env;
         }
         #endregion
-
         #region Index
         [HttpGet] // Get: Employee/Index
         public IActionResult Index()
@@ -34,7 +36,6 @@ namespace Demo.PL.Controllers
             return View(employees);
         }
         #endregion
-
         #region Create
 
         [HttpGet] // Get: Employee/Create
@@ -44,17 +45,32 @@ namespace Demo.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreatedEmployeeDto emoloyeeDto)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(EmployeeEditCreateViewModel employeeVM)
         {
             if (!ModelState.IsValid)
             {
-                return View(emoloyeeDto);
+                return View(employeeVM);
             }
             var Message = string.Empty;
 
             try
             {
-                var result = _employeeService.CreateEmployee(emoloyeeDto);
+                var CreatedEmp = new CreatedEmployeeDto
+                {
+                    Name = employeeVM.Name,
+                    Email = employeeVM.Email,
+                    Address = employeeVM.Address,
+                    Age = employeeVM.Age,
+                    Salary = employeeVM.Salary,
+                    PhoneNumber = employeeVM.PhoneNumber,
+                    IsActive = employeeVM.IsActive,
+                    EmployeeType = employeeVM.EmployeeType,
+                    Gender = employeeVM.Gender,
+                    HiringDate = employeeVM.HiringDate,
+                    DepartmentId = employeeVM.DepartmentId
+                };
+                var result = _employeeService.CreateEmployee(CreatedEmp);
 
                 if (result > 0)
                 {
@@ -64,7 +80,7 @@ namespace Demo.PL.Controllers
                 {
                     Message = "Employee Is Not Created";
                     ModelState.AddModelError(string.Empty, Message);
-                    return View(emoloyeeDto);
+                    return View(employeeVM);
                 }
             }
             catch (Exception ex)
@@ -76,11 +92,10 @@ namespace Demo.PL.Controllers
                 Message = _env.IsDevelopment() ? ex.Message : "Employee Is Not Created";
             }
             ModelState.AddModelError(string.Empty, Message);
-            return View(emoloyeeDto);
+            return View(employeeVM);
         }
 
         #endregion
-
         #region Details
         [HttpGet] // Get: Employee/Details
         public IActionResult Details(int? id)
@@ -94,7 +109,6 @@ namespace Demo.PL.Controllers
             return View(employee);
         }
         #endregion
-
         #region Update
 
         [HttpGet] // Get: Department/Edit/id
@@ -106,9 +120,8 @@ namespace Demo.PL.Controllers
 
             if (employee is null)
                 return NotFound();
-            return View(new UpdatedEmployeeDto
+            return View(new EmployeeEditCreateViewModel
             {
-                Id =employee.Id,
                 Name = employee.Name,
                 Email = employee.Email,
                 Age = employee.Age,
@@ -123,14 +136,29 @@ namespace Demo.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute]int id,UpdatedEmployeeDto employee)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([FromRoute]int id, EmployeeEditCreateViewModel employeeVM)
         {
             if(!ModelState.IsValid)
-                return View(employee);
+                return View(employeeVM);
             var Message = string.Empty;
             try
             {
-                var Updated = _employeeService.UpdateEmployee(employee) > 0;
+                var UpdatedEmp = new UpdatedEmployeeDto
+                {
+                    Id = id,
+                    Name = employeeVM.Name,
+                    Email = employeeVM.Email,
+                    Address = employeeVM.Address,
+                    Age= employeeVM.Age,
+                    Salary = employeeVM.Salary,
+                    PhoneNumber = employeeVM.PhoneNumber,
+                    IsActive = employeeVM.IsActive,
+                    EmployeeType = employeeVM.EmployeeType,
+                    Gender = employeeVM.Gender,
+                    HiringDate= employeeVM.HiringDate,
+                };
+                var Updated = _employeeService.UpdateEmployee(UpdatedEmp) > 0;
 
                 if (Updated)
                     return RedirectToAction(nameof(Index));
@@ -145,11 +173,10 @@ namespace Demo.PL.Controllers
                 Message = _env.IsDevelopment() ? ex.Message : "An Error has occured during the Updating";
             }
             ModelState.AddModelError(string.Empty, Message);
-            return View(employee);
+            return View(employeeVM);
         }
 
         #endregion
-
         #region Delete
         [HttpGet]  // Get: Employee/Delete/id?
         public IActionResult Delete(int? id)
@@ -164,6 +191,7 @@ namespace Demo.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var Message = string.Empty;
