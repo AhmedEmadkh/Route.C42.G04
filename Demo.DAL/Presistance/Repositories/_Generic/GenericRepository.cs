@@ -31,21 +31,14 @@ namespace Demo.DAL.Presistance.Repositories._Generic
             return _context.Set<T>().Where(X => !X.IsDeleted);
         }
 
-        public int Add(T T)
-        {
-            _context.Set<T>().Add(T);
-            return _context.SaveChanges();
-        }
-        public int Update(T T)
-        {
-            _context.Set<T>().Update(T);
-            return _context.SaveChanges();
-        }
-        public int Delete(T T)
+        public void Add(T T) => _context.Set<T>().Add(T);
+        
+        public void Update(T T) => _context.Set<T>().Update(T);
+        
+        public void Delete(T T)
         {
             T.IsDeleted = true;
             _context.Set<T>().Update(T);
-            return _context.SaveChanges();
         }
     }
 }
