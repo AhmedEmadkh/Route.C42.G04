@@ -30,9 +30,9 @@ namespace Demo.PL.Controllers
         #endregion
         #region Index
         [HttpGet] // Get: Employee/Index
-        public IActionResult Index()
+        public IActionResult Index(string name)
         {
-            var employees = _employeeService.GetAllEmployees();
+            var employees = _employeeService.GetEmployees(name);
             return View(employees);
         }
         #endregion

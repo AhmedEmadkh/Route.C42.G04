@@ -2,6 +2,7 @@
 using Demo.DAL.Entities.Employees;
 using Demo.DAL.Presistance.Data;
 using Demo.DAL.Presistance.Repositories.Employees;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,13 @@ namespace Demo.BLL.Services.Employees
         {
             _employeeRepository = employeeRepository;
         }
-        public IEnumerable<EmployeeDto> GetAllEmployees()
+        public IEnumerable<EmployeeDto> GetEmployees(string search)
         {
-            var employees = _employeeRepository.GetAllAsIQueryable().Select(employee => new EmployeeDto
+            var employees = _employeeRepository
+                .GetAllAsIQueryable()
+                .Where(E => !E.IsDeleted && (string.IsNullOrEmpty(search) || E.Name.Contains(search)))
+                .Include(E => E.Department)
+                .Select(employee => new EmployeeDto
             {
                 Id = employee.Id,
                 Name = employee.Name,

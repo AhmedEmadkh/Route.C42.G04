@@ -8,6 +8,16 @@
 
 <a asp-controller="Employee" asp-action="Create" class="btn btn-primary my-3">Create New Employee</a>
 
+<form asp-action="Index" method="get" class="my-2 row justify-content-center align-items-center">
+    <div class="row col-8 offset-1">
+        <div class="col-8">
+            <input  type="text" name="name" class="form-control" id="searchInp" placeholder="Search By Name"/>
+        </div>
+        <div class="col-4">
+            <input type="submit" value="Search" class="btn btn-success"/>
+        </div>
+    </div>
+</form>
 
 @if (Model.Count() > 0)
 {

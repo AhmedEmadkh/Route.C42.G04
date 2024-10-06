@@ -21,6 +21,7 @@ namespace Demo.PL
             #region Configure Services
 
             webApplicationBuilder.Services.AddControllersWithViews();
+            webApplicationBuilder.Logging.AddConsole();
             webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options
