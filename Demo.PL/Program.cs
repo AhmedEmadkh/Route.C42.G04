@@ -3,6 +3,7 @@ using Demo.BLL.Services.Employees;
 using Demo.DAL.Presistance.Data;
 using Demo.DAL.Presistance.Repositories.Departments;
 using Demo.DAL.Presistance.Repositories.Employees;
+using Demo.PL.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -28,12 +29,16 @@ namespace Demo.PL
                 .UseLazyLoadingProxies()
                 .UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
             webApplicationBuilder.Services.AddScoped<IDepartmentService, DepartmentService>();
             webApplicationBuilder.Services.AddScoped<IEmployeeService, EmployeeService>();
             
             webApplicationBuilder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             webApplicationBuilder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
+
+            // Configure the Auto Mapping
+            webApplicationBuilder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
             #endregion
 
             var app  = webApplicationBuilder.Build();

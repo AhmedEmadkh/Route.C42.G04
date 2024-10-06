@@ -1,4 +1,5 @@
-﻿using Demo.BLL.Models.Departments;
+﻿using AutoMapper;
+using Demo.BLL.Models.Departments;
 using Demo.BLL.Services.Departments;
 using Demo.PL.ViewModels.Departments;
 using Microsoft.AspNetCore.Hosting;
@@ -14,12 +15,14 @@ namespace Demo.PL.Controllers
         #region Services
 
         private readonly IDepartmentService _departmentsService;
+        private readonly IMapper _map;
         private readonly ILogger<DepartmentController> _logger;
         private readonly IWebHostEnvironment _env;
 
         public DepartmentController
             (
             IDepartmentService departmentsService,
+            IMapper map,
             ILogger<DepartmentController> logger,
             IWebHostEnvironment env
             )
@@ -27,6 +30,7 @@ namespace Demo.PL.Controllers
             _logger = logger;
             _env = env;
             _departmentsService = departmentsService;
+            _map = map;
         }
 
         #endregion
@@ -58,13 +62,15 @@ namespace Demo.PL.Controllers
             var Message = string.Empty;
             try
             {
-                var departmentToCreate = new CreatedDepartmentDto()
-                {
-                    Code = departmentVM.Code,
-                    Name = departmentVM.Name,
-                    Description = departmentVM.Description,
-                    CreationDate = departmentVM.CreationDate,
-                };
+                //var departmentToCreate = new CreatedDepartmentDto()
+                //{
+                //    Code = departmentVM.Code,
+                //    Name = departmentVM.Name,
+                //    Description = departmentVM.Description,
+                //    CreationDate = departmentVM.CreationDate,
+                //};
+
+                var departmentToCreate = _map.Map<CreatedDepartmentDto>(departmentVM);
                 var Result = _departmentsService.CreateDepartment(departmentToCreate);
 
                 if (Result > 0)
@@ -117,13 +123,9 @@ namespace Demo.PL.Controllers
 
             if (department is null)
                 return NotFound();
-            return View(new DepartmentEditViewModel
-            {
-                Code = department.Code,
-                Name = department.Name,
-                Description = department.Description,
-                CreationDate = department.CreationDate,
-            });
+
+            var departmentVM = _map.Map<DeparmentDetailsDto, DepartmentEditViewModel>(department);
+            return View(departmentVM);
         }
 
         [HttpPost] // Post
@@ -135,14 +137,15 @@ namespace Demo.PL.Controllers
             var Message = string.Empty;
             try
             {
-                var departmentToUpdate = new UpdatedDepartmentDto()
-                {
-                    Id = id,
-                    Code = departmentVM.Code,
-                    Name = departmentVM.Name,
-                    Description = departmentVM.Description,
-                    CreationDate = departmentVM.CreationDate,
-                };
+                var departmentToUpdate = _map.Map< DepartmentEditViewModel , UpdatedDepartmentDto>(departmentVM);
+                //var departmentToUpdate = new UpdatedDepartmentDto()
+                //{
+                //    Id = id,
+                //    Code = departmentVM.Code,
+                //    Name = departmentVM.Name,
+                //    Description = departmentVM.Description,
+                //    CreationDate = departmentVM.CreationDate,
+                //};
 
                 var Updated = _departmentsService.UpdatedDepartment(departmentToUpdate) > 0;
                 if (Updated)
