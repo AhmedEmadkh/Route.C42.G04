@@ -1,3 +1,4 @@
+using Demo.BLL.Common.Services.Attachment;
 using Demo.BLL.Services.Departments;
 using Demo.BLL.Services.Employees;
 using Demo.DAL.Presistance.Data;
@@ -37,7 +38,7 @@ namespace Demo.PL
 
             webApplicationBuilder.Services.AddScoped<IDepartmentService, DepartmentService>();
             webApplicationBuilder.Services.AddScoped<IEmployeeService, EmployeeService>();
-
+            webApplicationBuilder.Services.AddTransient<IAttachmentService, AttachmentService>();
 
             // Configure the Auto Mapping
             webApplicationBuilder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Demo.BLL.Models.Departments;
+using Demo.BLL.Models.Employees;
+using Demo.DAL.Entities.Employees;
 using Demo.PL.ViewModels.Departments;
 
 namespace Demo.PL.Mapping
@@ -9,7 +11,7 @@ namespace Demo.PL.Mapping
         public MappingProfile()
         {
             #region Employee
-
+            CreateMap<CreatedEmployeeDto, Employee>();
             #endregion
 
             #region Department

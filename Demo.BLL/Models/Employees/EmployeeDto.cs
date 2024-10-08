@@ -27,5 +27,7 @@ namespace Demo.BLL.Models.Employees
         public string EmployeeType { get; set; }
 
         public string? Department { get; set; }
+
+        public string? Image { get; set; }
     }
 }

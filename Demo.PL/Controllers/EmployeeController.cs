@@ -68,7 +68,8 @@ namespace Demo.PL.Controllers
                     EmployeeType = employeeVM.EmployeeType,
                     Gender = employeeVM.Gender,
                     HiringDate = employeeVM.HiringDate,
-                    DepartmentId = employeeVM.DepartmentId
+                    DepartmentId = employeeVM.DepartmentId,
+                    Image = employeeVM.Image,
                 };
                 var result = _employeeService.CreateEmployee(CreatedEmp);
 

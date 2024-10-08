@@ -1,4 +1,5 @@
-﻿using Demo.BLL.Models.Employees;
+﻿using Demo.BLL.Common.Services.Attachment;
+using Demo.BLL.Models.Employees;
 using Demo.DAL.Entities.Employees;
 using Demo.DAL.Presistance.Data;
 using Demo.DAL.Presistance.Repositories.Employees;
@@ -15,10 +16,16 @@ namespace Demo.BLL.Services.Employees
     public class EmployeeService : IEmployeeService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAttachmentService _attachmentService;
 
-        public EmployeeService(IUnitOfWork unitOfWork)
+        public EmployeeService(
+            
+                IUnitOfWork unitOfWork,
+                IAttachmentService attachmentService
+            )
         {
             _unitOfWork = unitOfWork;
+            _attachmentService = attachmentService;
         }
         public IEnumerable<EmployeeDto> GetEmployees(string search)
         {
@@ -37,11 +44,12 @@ namespace Demo.BLL.Services.Employees
                 IsActive = employee.IsActive,
                 Gender = employee.Gender.ToString(),
                 EmployeeType = employee.EmployeeType.ToString(),
-                Department = employee.Department.Name
+                Department = employee.Department.Name,
+                Image = employee.Image,
             });
             return employees;
         }
-        public EmployeeDetailsDto GetEmployeeById(int id)
+        public EmployeeDetailsDto? GetEmployeeById(int id)
         {
             var employee = _unitOfWork.EmployeeRepository.Get(id);
 
@@ -59,7 +67,8 @@ namespace Demo.BLL.Services.Employees
                     HiringDate = employee.HiringDate,
                     Gender = employee.Gender,
                     EmployeeType = employee.EmployeeType,
-                    Department = employee.Department.Name
+                    Department = employee.Department?.Name,
+                    Image = employee.Image,
                 };
             }
             return null;
@@ -83,6 +92,11 @@ namespace Demo.BLL.Services.Employees
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
             };
+
+            if(employeeDto.Image is not null)
+                employee.Image = _attachmentService.Upload(employeeDto.Image, "images");
+
+
              _unitOfWork.EmployeeRepository.Add(employee);
             return _unitOfWork.Complete();
         }
@@ -102,6 +116,7 @@ namespace Demo.BLL.Services.Employees
                 Gender = employeeDto.Gender,
                 EmployeeType = employeeDto.EmployeeType,
                 DepartmentId = employeeDto.DepartmentId,
+                Image = employeeDto.Image,
                 CreatedBy = 1,
                 LastModifiedBy = 1,
                 LastModifiedOn = DateTime.UtcNow,
