@@ -9,8 +9,8 @@ namespace Demo.BLL.Common.Services.Attachment
 {
     public interface IAttachmentService
     {
-        string? Upload(IFormFile file,string folderName);
+        Task<string?> UploadAsync(IFormFile file,string folderName);
 
-        bool Delete(string filePath);
+        bool DeleteFile(string filePath);
     }
 }

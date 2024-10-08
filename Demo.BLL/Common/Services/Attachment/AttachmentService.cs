@@ -11,7 +11,7 @@ namespace Demo.BLL.Common.Services.Attachment
     {
         private readonly List<string> _allowedExtensions = new() { ".png", ".jpg", ".jpeg" };
         private const int _allowedMaxSize = 2_097_152;
-        public string? Upload(IFormFile file, string folderName)
+        public async Task<string?> UploadAsync(IFormFile file, string folderName)
         {
             var extension = Path.GetExtension(file.FileName); // Ahmed.png => .png (FileName not Name)
 
@@ -33,11 +33,11 @@ namespace Demo.BLL.Common.Services.Attachment
 
             using var fileStream = new FileStream(filePath, FileMode.Create);
 
-            file.CopyTo(fileStream); // Opens the Stream and Create the File
+            await file.CopyToAsync(fileStream); // Opens the Stream and Create the File
 
             return fileName; // Return File Name Bec. it is UNIQUE
         }
-        public bool Delete(string filePath)
+        public bool DeleteFile(string filePath)
         {
             if (File.Exists(filePath))
             {

@@ -20,21 +20,21 @@ namespace Demo.BLL.Services.Departments
            _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<DepartmentDto> GetAllDepartments()
+        public async Task<IEnumerable<DepartmentDto>> GetAllDepartmentsAsync()
         {
-            var departments = _unitOfWork.DepartmentRepository.GetAllAsIQueryable().Select(department => new DepartmentDto
+            var departments = await _unitOfWork.DepartmentRepository.GetAllAsIQueryable().Select(department => new DepartmentDto
             {
                 Id = department.Id,
                 Code = department.Code,
                 Name = department.Name,
                 CreationDate = department.CreationDate,
-            }).AsNoTracking().ToList();
+            }).AsNoTracking().ToListAsync();
             return departments;
         }
 
-        public DeparmentDetailsDto GetDartmentById(int Id)
+        public async Task<DeparmentDetailsDto?> GetDartmentByIdAsync(int Id)
         {
-            var departments = _unitOfWork.DepartmentRepository.Get(Id);
+            var departments = await _unitOfWork.DepartmentRepository.GetAsync(Id);
 
             if (departments is not null)
                 return new DeparmentDetailsDto
@@ -52,7 +52,7 @@ namespace Demo.BLL.Services.Departments
             return null;
         }
 
-        public int CreateDepartment(CreatedDepartmentDto departmentDto)
+        public async Task<int> CreateDepartmentAsync(CreatedDepartmentDto departmentDto)
         {
             var createdDepartment = new Department()
             {
@@ -65,10 +65,10 @@ namespace Demo.BLL.Services.Departments
                 LastModifiedOn = DateTime.UtcNow
             };
              _unitOfWork.DepartmentRepository.Add(createdDepartment);
-            return _unitOfWork.Complete();
+            return await _unitOfWork.CompleteAsync();
         }
 
-        public int UpdatedDepartment(UpdatedDepartmentDto departmentDto)
+        public async Task<int> UpdatedDepartmentAsync(UpdatedDepartmentDto departmentDto)
         {
             var updatedDepartment = new Department()
             {
@@ -81,17 +81,17 @@ namespace Demo.BLL.Services.Departments
                 LastModifiedOn = DateTime.UtcNow
             };
             _unitOfWork.DepartmentRepository.Update(updatedDepartment);
-            return _unitOfWork.Complete();
+            return await _unitOfWork.CompleteAsync();
         }
 
-        public bool DeleteDepartment(int Id)
+        public async Task<bool> DeleteDepartmentAsync(int Id)
         {
             var departmentRepo = _unitOfWork.DepartmentRepository;
-            var department = departmentRepo.Get(Id);
+            var department = await departmentRepo.GetAsync(Id);
             if(department is not null)
                 departmentRepo.Delete(department);
             
-            return _unitOfWork.Complete() > 0;
+            return await _unitOfWork.CompleteAsync() > 0;
         }
     }
 }

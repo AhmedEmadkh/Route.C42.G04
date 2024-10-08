@@ -2,11 +2,7 @@
 using Demo.BLL.Models.Departments;
 using Demo.BLL.Services.Departments;
 using Demo.PL.ViewModels.Departments;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
 
 namespace Demo.PL.Controllers
 {
@@ -37,9 +33,9 @@ namespace Demo.PL.Controllers
         #region Index
         
         [HttpGet] // Get: Department/Index
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var department = _departmentsService.GetAllDepartments();
+            var department = await _departmentsService.GetAllDepartmentsAsync();
             return View(department);
         }
 
@@ -53,7 +49,7 @@ namespace Demo.PL.Controllers
         }
         [HttpPost] //Post
         [ValidateAntiForgeryToken]
-        public IActionResult Create(DepartmentEditViewModel departmentVM)
+        public async Task<IActionResult> Create(DepartmentEditViewModel departmentVM)
         {
             if (!ModelState.IsValid) //Server Side Validation
             {
@@ -71,7 +67,7 @@ namespace Demo.PL.Controllers
                 //};
 
                 var departmentToCreate = _map.Map<CreatedDepartmentDto>(departmentVM);
-                var Result = _departmentsService.CreateDepartment(departmentToCreate);
+                var Result = await _departmentsService.CreateDepartmentAsync(departmentToCreate);
 
                 if (Result > 0)
                 {
@@ -100,11 +96,11 @@ namespace Demo.PL.Controllers
         #region Details
 
         [HttpGet] // Get: Department/Details
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id is null)
                 return BadRequest();
-            var department = _departmentsService.GetDartmentById(id.Value);
+            var department = await _departmentsService.GetDartmentByIdAsync(id.Value);
 
             if (department is null)
                 return NotFound();
@@ -115,11 +111,11 @@ namespace Demo.PL.Controllers
         #region Edit
 
         [HttpGet] // Get: Department/Edit/id
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
                 return BadRequest(); // 400
-            var department = _departmentsService.GetDartmentById(id.Value);
+            var department = await _departmentsService.GetDartmentByIdAsync(id.Value);
 
             if (department is null)
                 return NotFound();
@@ -130,7 +126,7 @@ namespace Demo.PL.Controllers
 
         [HttpPost] // Post
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, DepartmentEditViewModel departmentVM)
+        public async Task<IActionResult> Edit(int id, DepartmentEditViewModel departmentVM)
         {
             if (!ModelState.IsValid) //Server Side Validation
                 return View(departmentVM);
@@ -147,7 +143,7 @@ namespace Demo.PL.Controllers
                 //    CreationDate = departmentVM.CreationDate,
                 //};
 
-                var Updated = _departmentsService.UpdatedDepartment(departmentToUpdate) > 0;
+                var Updated = await _departmentsService.UpdatedDepartmentAsync(departmentToUpdate) > 0;
                 if (Updated)
                     return RedirectToAction(nameof(Index));
                 Message = "An Error has occured during the Updating";
@@ -168,12 +164,12 @@ namespace Demo.PL.Controllers
         #region Delete
 
         [HttpGet] // Get:Department/Delete
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)
                 return BadRequest();
 
-            var deleted = _departmentsService.GetDartmentById(id.Value);
+            var deleted = await _departmentsService.GetDartmentByIdAsync(id.Value);
 
             if (deleted is null)
                 return NotFound();
@@ -182,12 +178,12 @@ namespace Demo.PL.Controllers
 
         [HttpPost] //Post
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var message = string.Empty;
             try
             {
-                var deleted = _departmentsService.DeleteDepartment(id);
+                var deleted = await _departmentsService.DeleteDepartmentAsync(id);
 
                 if (deleted)
                     return RedirectToAction(nameof(Index));
