@@ -1,13 +1,8 @@
-﻿using Demo.BLL.Models.Employees;
-using Demo.BLL.Services.Departments;
+﻿using AutoMapper;
+using Demo.BLL.Models.Employees;
 using Demo.BLL.Services.Employees;
-using Demo.DAL.Entities.Employees;
 using Demo.PL.ViewModels.Employees;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
 
 namespace Demo.PL.Controllers
 {
@@ -16,23 +11,26 @@ namespace Demo.PL.Controllers
         #region Services
         private readonly IEmployeeService _employeeService;
         private readonly ILogger<EmployeeController> _logger;
+        private readonly IMapper _map;
         private readonly IWebHostEnvironment _env;
         public EmployeeController(
                 IEmployeeService employeeService,
                 ILogger<EmployeeController> logger,
+                IMapper map,
                 IWebHostEnvironment env
             )
         {
             _employeeService = employeeService;
             _logger = logger;
+            _map = map;
             _env = env;
         }
         #endregion
         #region Index
         [HttpGet] // Get: Employee/Index
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string name)
         {
-            var employees = _employeeService.GetAllEmployees();
+            var employees = await _employeeService.GetEmployeesAsync(name);
             return View(employees);
         }
         #endregion
@@ -46,7 +44,7 @@ namespace Demo.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EmployeeEditCreateViewModel employeeVM)
+        public async Task<IActionResult> Create(EmployeeEditCreateViewModel employeeVM)
         {
             if (!ModelState.IsValid)
             {
@@ -56,21 +54,8 @@ namespace Demo.PL.Controllers
 
             try
             {
-                var CreatedEmp = new CreatedEmployeeDto
-                {
-                    Name = employeeVM.Name,
-                    Email = employeeVM.Email,
-                    Address = employeeVM.Address,
-                    Age = employeeVM.Age,
-                    Salary = employeeVM.Salary,
-                    PhoneNumber = employeeVM.PhoneNumber,
-                    IsActive = employeeVM.IsActive,
-                    EmployeeType = employeeVM.EmployeeType,
-                    Gender = employeeVM.Gender,
-                    HiringDate = employeeVM.HiringDate,
-                    DepartmentId = employeeVM.DepartmentId
-                };
-                var result = _employeeService.CreateEmployee(CreatedEmp);
+                var CreatedEmp = _map.Map<CreatedEmployeeDto>(employeeVM);
+                var result = await _employeeService.CreateEmployeeAsync(CreatedEmp);
 
                 if (result > 0)
                 {
@@ -98,11 +83,11 @@ namespace Demo.PL.Controllers
         #endregion
         #region Details
         [HttpGet] // Get: Employee/Details
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id is null)
                 return BadRequest();
-            var employee = _employeeService.GetEmployeeById(id.Value);
+            var employee = await _employeeService.GetEmployeeByIdAsync(id.Value);
 
             if (employee is null)
                 return NotFound();
@@ -112,32 +97,22 @@ namespace Demo.PL.Controllers
         #region Update
 
         [HttpGet] // Get: Department/Edit/id
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id is null)
                 return BadRequest();
-            var employee = _employeeService.GetEmployeeById(id.Value);
+            var employee = await _employeeService.GetEmployeeByIdAsync(id.Value);
 
             if (employee is null)
                 return NotFound();
-            return View(new EmployeeEditCreateViewModel
-            {
-                Name = employee.Name,
-                Email = employee.Email,
-                Age = employee.Age,
-                Address = employee.Address,
-                Salary = employee.Salary,
-                PhoneNumber = employee.PhoneNumber,
-                IsActive = employee.IsActive,
-                EmployeeType = employee.EmployeeType,
-                Gender = employee.Gender,
-                HiringDate = employee.HiringDate,
-            });
+            var employeeVM = _map.Map<EmployeeEditCreateViewModel>(employee);
+
+            return View(employeeVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute]int id, EmployeeEditCreateViewModel employeeVM)
+        public async Task<IActionResult> Edit([FromRoute]int id, EmployeeEditCreateViewModel employeeVM)
         {
             if(!ModelState.IsValid)
                 return View(employeeVM);
@@ -158,7 +133,7 @@ namespace Demo.PL.Controllers
                     Gender = employeeVM.Gender,
                     HiringDate= employeeVM.HiringDate,
                 };
-                var Updated = _employeeService.UpdateEmployee(UpdatedEmp) > 0;
+                var Updated = await _employeeService.UpdateEmployeeAsync(UpdatedEmp) > 0;
 
                 if (Updated)
                     return RedirectToAction(nameof(Index));
@@ -179,11 +154,11 @@ namespace Demo.PL.Controllers
         #endregion
         #region Delete
         [HttpGet]  // Get: Employee/Delete/id?
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id is null)
                 return BadRequest();
-            var employee = _employeeService.GetEmployeeById(id.Value);
+            var employee = await _employeeService.GetEmployeeByIdAsync(id.Value);
 
             if (employee is null)
                 return NotFound();
@@ -192,12 +167,12 @@ namespace Demo.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var Message = string.Empty;
             try
             {
-                var deleted = _employeeService.DeleteEmployee(id);
+                var deleted = await _employeeService.DeleteEmployeeAsync(id);
 
                 if (deleted)
                     return RedirectToAction(nameof(Index));

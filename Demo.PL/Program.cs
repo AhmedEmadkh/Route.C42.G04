@@ -1,8 +1,11 @@
+using Demo.BLL.Common.Services.Attachment;
 using Demo.BLL.Services.Departments;
 using Demo.BLL.Services.Employees;
 using Demo.DAL.Presistance.Data;
 using Demo.DAL.Presistance.Repositories.Departments;
 using Demo.DAL.Presistance.Repositories.Employees;
+using Demo.DAL.Presistance.UnitOfWork;
+using Demo.PL.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -21,18 +24,24 @@ namespace Demo.PL
             #region Configure Services
 
             webApplicationBuilder.Services.AddControllersWithViews();
+            webApplicationBuilder.Logging.AddConsole();
             webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options
                 .UseLazyLoadingProxies()
                 .UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            //webApplicationBuilder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //webApplicationBuilder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            webApplicationBuilder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             webApplicationBuilder.Services.AddScoped<IDepartmentService, DepartmentService>();
             webApplicationBuilder.Services.AddScoped<IEmployeeService, EmployeeService>();
-            
-            webApplicationBuilder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            webApplicationBuilder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            webApplicationBuilder.Services.AddTransient<IAttachmentService, AttachmentService>();
 
+            // Configure the Auto Mapping
+            webApplicationBuilder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
             #endregion
 
             var app  = webApplicationBuilder.Build();

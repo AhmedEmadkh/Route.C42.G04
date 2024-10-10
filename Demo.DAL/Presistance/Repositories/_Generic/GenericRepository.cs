@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Demo.DAL.Presistance.Repositories._Generic
 {
-    public class GenericRepository<T> where T : ModelBase
+    public class GenericRepository<T> : IGenericRepository<T> where T : ModelBase
     {
         private protected readonly ApplicationDbContext _context;
         public GenericRepository(ApplicationDbContext context)
@@ -14,16 +14,16 @@ namespace Demo.DAL.Presistance.Repositories._Generic
             _context = context;
         }
 
-        public T Get(int id)
+        public async Task<T?> GetAsync(int id)
         {
-            return _context.Set<T>().Find(id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
-        public IEnumerable<T> GetAll(bool withAsNoTracking = true)
+        public async Task<IEnumerable<T>> GetAllAsync(bool withAsNoTracking = true)
         {
             if (withAsNoTracking)
-                return _context.Set<T>().Where(X => !X.IsDeleted).AsNoTracking().ToList();
-            return _context.Set<T>().Where(X => !X.IsDeleted).ToList();
+                return await _context.Set<T>().Where(X => !X.IsDeleted).AsNoTracking().ToListAsync();
+            return await _context.Set<T>().Where(X => !X.IsDeleted).ToListAsync();
         }
 
         public IQueryable<T> GetAllAsIQueryable(bool withAsNoTracking = true)
@@ -31,21 +31,14 @@ namespace Demo.DAL.Presistance.Repositories._Generic
             return _context.Set<T>().Where(X => !X.IsDeleted);
         }
 
-        public int Add(T T)
-        {
-            _context.Set<T>().Add(T);
-            return _context.SaveChanges();
-        }
-        public int Update(T T)
-        {
-            _context.Set<T>().Update(T);
-            return _context.SaveChanges();
-        }
-        public int Delete(T T)
+        public void Add(T T) => _context.Set<T>().Add(T);
+        
+        public void Update(T T) => _context.Set<T>().Update(T);
+        
+        public void Delete(T T)
         {
             T.IsDeleted = true;
             _context.Set<T>().Update(T);
-            return _context.SaveChanges();
         }
     }
 }

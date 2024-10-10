@@ -1,10 +1,10 @@
 ﻿@model EmployeeEditCreateViewModel
 @inject IDepartmentService departmentService
 @{
-    var Departments = new SelectList(departmentService.GetAllDepartments(),nameof(DepartmentDto.Id),nameof(DepartmentDto.Name));
+    var Departments = new SelectList(await departmentService.GetAllDepartmentsAsync(),nameof(DepartmentDto.Id),nameof(DepartmentDto.Name));
 }
 
-<form asp-action="@ViewBag.Action" class="row col-6">
+<form asp-action="@ViewBag.Action" class="row col-6" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly"></div>
 
     <div class="form-group col-6 mb-3">
@@ -42,14 +42,14 @@
         <select asp-for="DepartmentId" asp-items="@Departments" class="form-control">
             <option value="@null">Choose...</option>
         </select>
-
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
     </div>
     <div class="form-group col-6 mb-3">
         <label class="control-lable mb-2" asp-for="EmployeeType"></label>
         <select asp-for="EmployeeType" asp-items="Html.GetEnumSelectList<EmployeeType>()" class="form-control">
             <option value="">Select Employee Type</option>
         </select>
-
+        <span asp-validation-for="EmployeeType" class="text-danger"></span>
     </div>
     <div class="form-group col-6 mb-3">
         <label class="control-lable mb-2 me-2" asp-for="Gender"></label><br />
@@ -66,6 +66,11 @@
     <div class="form-group col-12 mb-3">
         <label class="form-lable mb-2" asp-for="HiringDate"></label>
         <input type="date" asp-for="HiringDate" class="form-control" />
+        <span asp-validation-for="HiringDate" class="text-danger"></span>
+    </div>
+    <div class="form-group col-12 mb-3">
+        <label class="form-lable mb-2" asp-for="Image"></label>
+        <input asp-for="Image" class="form-control" />
     </div>
     <div class="form-check col-12 mb-3">
         <input asp-for="IsActive" class="form-check-input" />

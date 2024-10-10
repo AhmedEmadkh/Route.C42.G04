@@ -25,5 +25,7 @@ namespace Demo.DAL.Entities.Employees
 
         // Navigational Property [ONE]
         public virtual Department? Department { get; set; }
+
+        public string? Image { get; set; }
     }
 }
