@@ -2,11 +2,13 @@
 using Demo.BLL.Models.Employees;
 using Demo.BLL.Services.Employees;
 using Demo.PL.ViewModels.Employees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.PL.Controllers
 {
-    public class EmployeeController : Controller
+	[Authorize]
+	public class EmployeeController : Controller
     {
         #region Services
         private readonly IEmployeeService _employeeService;
