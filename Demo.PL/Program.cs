@@ -66,6 +66,7 @@ namespace Demo.PL
             webApplicationBuilder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Acount/SignIn";
+                //options.LogoutPath = "/Acount/SignIn";
             });
 
 

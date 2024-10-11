@@ -115,5 +115,14 @@ namespace Demo.PL.Controllers
 		#endregion
 
 
+		#region SignOut
+		public async new Task<IActionResult>SignOut()
+		{
+			await _signInManager.SignOutAsync();
+			return RedirectToAction(nameof(SignIn));
+		}
+
+		#endregion
+
 	}
 }
