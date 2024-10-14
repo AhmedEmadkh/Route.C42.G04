@@ -28,7 +28,7 @@
                     <td>@department.Code</td>
                     <td>@department.Name</td>
                     <td>@department.CreationDate</td>
-                    <partial name="_ButtonsPartial" model="@department.Id" />
+                    <partial name="_ButtonsPartial" model="@department.Id.ToString()" />
                 </tr>
                 <!-- modal -->
                 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

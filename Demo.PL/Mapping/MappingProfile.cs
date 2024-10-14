@@ -2,8 +2,10 @@
 using Demo.BLL.Models.Departments;
 using Demo.BLL.Models.Employees;
 using Demo.DAL.Entities.Employees;
+using Demo.DAL.Entities.Identity;
 using Demo.PL.ViewModels.Departments;
 using Demo.PL.ViewModels.Employees;
+using Demo.PL.ViewModels.Users;
 
 namespace Demo.PL.Mapping
 {
@@ -23,6 +25,12 @@ namespace Demo.PL.Mapping
             CreateMap<DepartmentEditViewModel, UpdatedDepartmentDto>();
 
             CreateMap<DepartmentEditViewModel, CreatedDepartmentDto>();
+
+            #endregion
+
+            #region User
+
+            CreateMap<ApplicationUser, UserViewModel>().ReverseMap();
 
             #endregion
         }

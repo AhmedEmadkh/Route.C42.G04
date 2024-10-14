@@ -6,7 +6,9 @@ using Demo.DAL.Presistance.Data;
 using Demo.DAL.Presistance.Repositories.Departments;
 using Demo.DAL.Presistance.Repositories.Employees;
 using Demo.DAL.Presistance.UnitOfWork;
+using Demo.PL.Helpers;
 using Demo.PL.Mapping;
+using Demo.PL.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -43,6 +45,7 @@ namespace Demo.PL
             webApplicationBuilder.Services.AddScoped<IDepartmentService, DepartmentService>();
             webApplicationBuilder.Services.AddScoped<IEmployeeService, EmployeeService>();
             webApplicationBuilder.Services.AddTransient<IAttachmentService, AttachmentService>();
+            webApplicationBuilder.Services.AddTransient<IMailSettings, MailSettings>();
 
             webApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>((options) =>
             {
@@ -66,9 +69,11 @@ namespace Demo.PL
             webApplicationBuilder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Acount/SignIn";
-                //options.LogoutPath = "/Acount/SignIn";
             });
 
+            // Configure the email settings
+
+            webApplicationBuilder.Services.Configure<Settings.EmailSettings>(webApplicationBuilder.Configuration.GetSection("MailSettings"));
 
             // Configure the Auto Mapping
             webApplicationBuilder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfile()));
