@@ -1,5 +1,5 @@
 # Project Name
-
+MVC Project
 ## Overview
 This project is a web application built using **ASP.NET Core MVC** and follows an **N-Tier architecture**. The application provides functionality for managing employee and department details, including adding, deleting, and updating records, with built-in client-side validation for a better user experience.
 
