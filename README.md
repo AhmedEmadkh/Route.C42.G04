@@ -30,4 +30,4 @@ This project is a web application built using **ASP.NET Core MVC** and follows a
 ## Installation
 1. Clone the repository:
    ```bash
-   [git clone https://github.com/your-repo-url.git](https://github.com/AhmedEmadkh/Route.C42.G04.git)
+   https://github.com/AhmedEmadkh/Route.C42.G04.git
