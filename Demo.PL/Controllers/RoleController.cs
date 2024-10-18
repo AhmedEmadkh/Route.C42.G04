@@ -7,6 +7,7 @@ namespace Demo.PL.Controllers
 {
     public class RoleController : Controller
     {
+        #region Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
 
@@ -15,6 +16,8 @@ namespace Demo.PL.Controllers
             _roleManager = roleManager;
             _mapper = mapper;
         }
+        #endregion
+        #region Index
         public async Task<IActionResult> Index(string SearchValue)
         {
             if (string.IsNullOrEmpty(SearchValue))
@@ -30,5 +33,24 @@ namespace Demo.PL.Controllers
                 return View(MappedRoles);
             }
         }
+        #endregion
+        #region Create
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(RoleViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var MappedRole = _mapper.Map<IdentityRole>(model);
+                await _roleManager.CreateAsync(MappedRole);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+        #endregion
     }
 }

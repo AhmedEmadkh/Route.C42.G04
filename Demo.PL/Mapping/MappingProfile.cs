@@ -34,7 +34,8 @@ namespace Demo.PL.Mapping
             #endregion
             #region Roles
 
-            CreateMap<IdentityRole, RoleViewModel>().ReverseMap();
+            CreateMap<IdentityRole, RoleViewModel>()
+                .ForMember(R => R.RoleName,O => O.MapFrom(IR => IR.Name)).ReverseMap();
 
             #endregion
 
