@@ -3,6 +3,7 @@ using Demo.PL.ViewModels.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 namespace Demo.PL.Controllers
 {
     public class RoleController : Controller
@@ -29,8 +30,16 @@ namespace Demo.PL.Controllers
             else
             {
                 var Role = await _roleManager.FindByNameAsync(SearchValue);
-                var MappedRoles = _mapper.Map<IEnumerable<RoleViewModel>>(Role);
-                return View(MappedRoles);
+                if (Role is not null)
+                {
+                var MappedRoles = _mapper.Map<IEnumerable<RoleViewModel>>(new List<IdentityRole> { Role });
+                    return View(MappedRoles);
+
+                }
+                else
+                {
+                    return View(new List<RoleViewModel>());
+                }
             }
         }
         #endregion
@@ -50,6 +59,67 @@ namespace Demo.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
+        }
+        #endregion
+        #region Details
+        [HttpGet]
+        public async Task<IActionResult> Details(string Id,string ViewName = "Details")
+        {
+            if (string.IsNullOrEmpty(Id))
+                return BadRequest();
+            var Role = await _roleManager.FindByIdAsync(Id);
+            if(Role is null)
+                return NotFound();
+            var MappedRole = _mapper.Map<RoleViewModel>(Role);
+            return View(ViewName, MappedRole);
+        }
+        #endregion
+        #region Edit
+        [HttpGet]
+        public async Task<IActionResult> Edit(string Id)
+        {
+            return await Details(Id, "Edit");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(RoleViewModel model,[FromRoute]string Id)
+        {
+            if (Id != model.Id)
+                return BadRequest();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingRole = await _roleManager.FindByIdAsync(Id);
+                    if(existingRole is null)
+                        return NotFound();
+                    existingRole.Name = model.RoleName;
+                    await _roleManager.UpdateAsync(existingRole);
+                    return RedirectToAction(nameof(Index));
+                }catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+            }
+            return View(model);
+        }
+        #endregion
+        #region Delete
+        public async Task<IActionResult> Delete(string Id)
+        {
+            if (string.IsNullOrWhiteSpace(Id))
+                return BadRequest();
+
+            try
+            {
+                var Role = await _roleManager.FindByIdAsync(Id);
+                await _roleManager.DeleteAsync(Role);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty,ex.Message);
+                return RedirectToAction("Error", ex.Message);
+            }
         }
         #endregion
     }
