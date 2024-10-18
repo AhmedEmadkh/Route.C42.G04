@@ -102,8 +102,6 @@ namespace Demo.PL
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseAuthorization();
-
                 app.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}"
