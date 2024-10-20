@@ -1,7 +1,13 @@
-﻿using Demo.DAL.Entities.Identity;
+﻿using Demo.DAL.Common.Email;
+using Demo.DAL.Entities.Identity;
+using Demo.PL.Helpers;
+using Demo.PL.Settings;
 using Demo.PL.ViewModels.Identity;
+using Demo.PL.ViewModels.Users;
+using MailKit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace Demo.PL.Controllers
 {
@@ -9,11 +15,13 @@ namespace Demo.PL.Controllers
     {
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
+		private readonly IMailSettings _mailSettings;
 
-		public AcountController(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager)
+		public AcountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMailSettings mailSettings)
         {
 			_userManager = userManager;
 			_signInManager = signInManager;
+			_mailSettings = mailSettings;
 		}
         #region SignUp
 
@@ -120,6 +128,88 @@ namespace Demo.PL.Controllers
 		{
 			await _signInManager.SignOutAsync();
 			return RedirectToAction(nameof(SignIn));
+		}
+
+		#endregion
+
+		#region ForgetPassword
+
+		public IActionResult ForgetPassword()
+		{
+			return View();
+		}
+
+
+		public async Task<IActionResult> SendEmail(ForgetPasswordViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var User = await _userManager.FindByEmailAsync(model.Email);
+				if (User is not null)
+				{
+					// Create the token which is valid for only one time 
+					var token = await _userManager.GeneratePasswordResetTokenAsync(User);
+					// Create the URL for the ResetPassword
+					var ResetPasswordLink = Url.Action("ResetPassword", "Acount", new {email = User.Email,Token = token },Request.Scheme);
+
+					// Create Email
+					var email = new Email
+					{
+						Subject = "Reset Password",
+						To = model.Email,
+						Body = ResetPasswordLink
+					};
+					// Send the Email
+					 _mailSettings.sendEmail(email);
+					return RedirectToAction(nameof(CheckYourInbox));
+				}
+				else
+				{
+					ModelState.AddModelError(string.Empty, "User Is not Found");
+				}
+			}
+				return View(nameof(ForgetPassword), model);
+		}
+
+
+		public IActionResult CheckYourInbox()
+		{
+			return View();
+		}
+		#endregion
+
+		#region ResetPassword
+		[HttpGet]
+		public IActionResult ResetPassword(string email,string token)
+		{
+			TempData["email"] = email;
+			TempData["token"] = token;
+			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				string email = TempData["email"] as string ?? string.Empty;
+				string token = TempData["token"] as string ?? string.Empty;
+				var User = await _userManager.FindByEmailAsync(email);
+				var Result = await _userManager.ResetPasswordAsync(User, token, model.NewPassword);
+
+				if (Result.Succeeded)
+				{
+					return RedirectToAction(nameof(SignIn));
+				}
+				else
+				{
+					foreach(var err in Result.Errors)
+					{
+						ModelState.AddModelError(string.Empty, err.Description);
+					}
+				}
+			}
+			return View(model);
 		}
 
 		#endregion

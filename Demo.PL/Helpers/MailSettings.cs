@@ -18,14 +18,19 @@ namespace Demo.PL.Helpers
 
             mail.To.Add(MailboxAddress.Parse(email.To));
             mail.From.Add(new MailboxAddress(_options.Value.DisplayName, _options.Value.Email));
+
             var builder = new BodyBuilder();
             builder.TextBody = email.Body;
             mail.Body = builder.ToMessageBody();
+
             using var smtp = new SmtpClient();
-            smtp.ConnectAsync(_options.Value.Host, _options.Value.Port, MailKit.Security.SecureSocketOptions.StartTls);
+
+            smtp.Connect(_options.Value.Host, _options.Value.Port, MailKit.Security.SecureSocketOptions.StartTls);
             smtp.Authenticate(_options.Value.Email,_options.Value.Password);
-            smtp.Send(mail);
-            smtp.Disconnect(true);
+            // Send Email
+             smtp.Send(mail);
+            // Disconnect After sending
+             smtp.Disconnect(true);
         }
     }
 }
